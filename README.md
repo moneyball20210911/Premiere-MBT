@@ -4,5 +4,7 @@
 
 // command lines
 
-# yarn install
-# yarn start
+ yarn install
+ yarn start
+ 
+                          @moneyball
