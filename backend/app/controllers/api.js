@@ -1,24 +1,21 @@
 const router = require("express").Router();
 const {Wallets} = require("../models");
-/* const  = db.Wallets; */
 
-const APIENTRY = "/api/"
+const APIENTRY = "/api"
 
-router.post(APIENTRY + "/add/user", (req, res)=>{
+router.post(APIENTRY + "/add/user", async (req, res)=>{
   const {address} = req.body;
-  Wallets
-    .save({address})
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while saving the Address."
-      });
-    });
-  /* console.log(address)
-  res.json({status:'ok'}) */
+  if (address) {
+    const w = await Wallets.find({address})
+    if (w) {
+      if (w.length===0) {
+        const wallet = new Wallets({ address });
+        await wallet.save();
+      }
+      return res.send({status:'ok'});
+    }
+  }
+  res.send({status:'fail'});
 });
 
 module.exports = router;

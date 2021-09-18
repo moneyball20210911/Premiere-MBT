@@ -2,7 +2,7 @@ import React, {useState, useEffect } from "react";
 import "./styles.css";
 import Success from './success';
 const App = () => {
-  const [ok, setOk] = useState(true);
+  const [ok, setOk] = useState(false);
   const options = {
     key: "rzp_live_JOlrGIAoSDme3h",
     currency: "INR",
@@ -10,10 +10,9 @@ const App = () => {
     amount: "10000", //  = INR 100
     name: "MoneyBall Token",
     description: "Pay for the Webinar",
+    // handle after payment success
     handler: function (response) {
-      // alert(response.razorpay_payment_id);
-      // rzp1.close();
-      setOk(false);
+      setOk(true);
 
     },
     prefill: {
@@ -36,8 +35,7 @@ const App = () => {
     rzp1.on("payment.failed", (res) => {
       // handle fail Payment
       console.log("Payment Failed: ", res);
-      
-      setOk(true);
+      setOk(false);
     });
     rzp1.open();
   };

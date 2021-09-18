@@ -23,8 +23,9 @@ export default function Success(){
                     ethereum.request({ method: 'eth_requestAccounts' }).then(accs=>{
                         if (accs && accs.length) {
                             console.log(process.env.REACT_APP_PROXY + `/api/add/user`);
-                            axios.post(process.env.REACT_APP_PROXY + `/api/add/user`, { address }).then(res => {
-                                if (res && res.status==='ok') {
+                            axios.post(process.env.REACT_APP_PROXY + `/api/add/user`, { address:accs[0] }).then(res => {
+                                const data = res && res.data;
+                                if (data && data.status==='ok') {
                                     setAddress(accs[0])
                                     window.sessionStorage.setItem("connect", "1")
                                 } else {
