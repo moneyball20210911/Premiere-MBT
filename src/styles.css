@@ -23,7 +23,7 @@ body{
   /* width: 10%; */
   margin-left: 47%;
   position: absolute;
-  top: 25%;
+  top: 45%;
   color: white;
   background-color: black;
   font-size: 20px;
@@ -33,12 +33,17 @@ body{
 }
 @media (max-width: 1000px) {
   .back-button{
-    margin-left: 37%;
+    top: 60%;
+    /* margin-left: 37%; */
   }
 }
-@media (max-width: 1200px) {
+@media (max-width: 600px) {
   .back-button{
-    top: 15%;
+    top: 70%;
+    margin-left: 37%;
+  }
+  .text-note{
+    margin-top:-10%;
   }
 }
 .back-button:hover{
@@ -49,18 +54,17 @@ body{
 }
 .notice-text{
   color: white;
-  font-family: 'Montserrat', 'Sansation';
-  font-weight: bold;
+  font-family: 'Montserrat';
+  /* font-weight: bold; */
   font-size: 20px;
   text-align: center;
   word-break: break-word;
 }
 .text-note{
   position:absolute;
-  top: 30%;
+  top: 25%;
   width: 60%;
   margin-left: 20%;
-  margin-top: 10%;
   
 }
 .success-header{

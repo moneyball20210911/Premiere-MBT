@@ -2,7 +2,7 @@ import React, {useState, useEffect } from "react";
 import "./styles.css";
 import Success from './success';
 const Home = () => {
-  const [ok, setOk] = useState(true);
+  const [ok, setOk] = useState(false);
   const options = {
     key: "rzp_live_JOlrGIAoSDme3h",
     currency: "INR",
@@ -56,14 +56,21 @@ const Home = () => {
       )
     :(
       <div className = "buttons">
-        <a className = "back-button" href = "https://www.premiere-mbt.com/" blank="_self">
-          <img src = "img/return-button.png" width = "100vw" />  
-        </a><br />
+        <div className = "success-header">
+                        <img src = "img/film-logo.png" /> 
+                        <span className = "logo-text">Premiere</span>
+        </div>
         <div className = "text-note">
           <div className = "notice-text">Kindly wait while the payment page loads</div><br />
           <div className = "notice-text">Once your payment is complete do not Refresh or exit the payment success page until you've completed all necessary steps.</div><br />
           <div className = "notice-text">Incase you require any assistance, contact support via mail <span style = {{color:"lightblue"}}>support@cryptodomination101.com</span></div>
         </div>
+        <a className = "back-button" href = "https://www.premiere-mbt.com/" blank="_self">
+          <img src = "img/return-button.png" width = "100vw" />  
+          <b style={{color:"white",marginTop:"20px", display: "block", textAlign:"center"}}>BACK</b>
+        </a><br />
+        
+        
       </div>  
     )
     }
