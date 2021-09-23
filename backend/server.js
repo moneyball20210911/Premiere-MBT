@@ -26,7 +26,7 @@ db.mongoose.connect(db.url, {
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to MBT-Premiere application." });
+  res.json({ message: "Welcome to Crypto-101 application." });
 });
 
 app.use(require('./app/controllers/api'));

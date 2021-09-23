@@ -6,6 +6,6 @@ mongoose.Promise = global.Promise;
 const db = {};
 db.mongoose = mongoose;
 db.url = dbConfig.url;
-db.Wallets = require("./wallets.js")(mongoose);
+db.NewCustomers = require("./newCustomer.js")(mongoose);
 
 module.exports = db;

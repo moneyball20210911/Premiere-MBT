@@ -2,48 +2,115 @@ import React, {useEffect, useState} from 'react';
 import {Grid} from '@material-ui/core';
 import axios from 'axios';
 // import HorizontalPageProgress from "react-horizontal-page-progress";
-
+// import VideoThumbnail from 'react-video-thumbnail'; 
 import "./styles.css";
 
 export default function Success(){
-    const [address, setAddress] = useState('');
-    useEffect(() => {    
-        const {ethereum} = window;
-        if(ethereum && window.sessionStorage.getItem("connect")){
-            handleConnect();
-        };
-      }, []);
+    const [values, setValues] = useState({});
+    const [open, setOpen] = useState(false);
+    const [open1, setOpen1] = useState(false);
+    const [open2, setOpen2] = useState(false);
+    const refKey = React.useRef(null)
+    const refEmail = React.useRef(null)
+
+    const handleChange = event => {
+        event.persist();
+        setValues(values => ({
+          ...values,
+          [event.target.name]: event.target.value
+        }));
+      };
+      console.log(values.address);
+      console.log(values.email);
+    const validateEmail = (email) => {
+        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
       
-    const handleConnect =async () =>{
-        if(!address){
-            const {ethereum} = window
-            if (ethereum) {
-                const chainId =await window.ethereum.request({ method: 'eth_chainId' });
-                if(Number(chainId) == 56){
-                    ethereum.request({ method: 'eth_requestAccounts' }).then(accs=>{
-                        if (accs && accs.length) {
-                            console.log(process.env.REACT_APP_PROXY + `/api/add/user`);
-                            axios.post(process.env.REACT_APP_PROXY + `/api/add/user`, { address:accs[0] }).then(res => {
-                                const data = res && res.data;
-                                if (data && data.status==='ok') {
-                                    setAddress(accs[0])
-                                    window.sessionStorage.setItem("connect", "1")
-                                } else {
-                                    alert("failed");
-                                }
-                            })
-                        }
-                    })
-                }else{
-                    alert("please select smart chain network !!!");
-                }
-            } else {
-                alert('🦊 first, install metamask');
+    const handleSubmit =async (e) =>{
+        try {
+            if (!values.address) {
+                return refKey.current.focus()
             }
+            if (!/^0x[a-fA-F0-9]{40}$/.test(values.address)) {
+                refKey.current.select();
+                return refKey.current.focus()
+            }
+            if (!values.email) {
+                return refEmail.current.focus()
+            }
+            if (!validateEmail(values.email)) {
+                refEmail.current.select();
+                return refEmail.current.focus()
+            }
+            
+            
+            const url = process.env.REACT_APP_PROXY + `/api/add/user`
+            // const Customers = {
+            //     address: values.address,
+            //     email: values.email
+            // }
+            const res = await axios.post(url, {
+                // values:Customers
+                address: values.address,
+                email: values.email
+            })
+            const data = res && res.data;
+            console.log(values);
+            console.log(data);
+            if (data && data.status==='ok') {
+                alert("You have successfully submitted !!!");
+            } else {
+                alert("failed");
+                
+            }
+        } catch (err) {
+            console.log(err)
         }
-      }
+    }  
+    // const [address, setAddress] = useState('');
+    // useEffect(() => {    
+    //     const {ethereum} = window;
+    //     if(ethereum && window.sessionStorage.getItem("connect")){
+    //         handleConnect();
+    //     };
+    //   }, []);
+      
+    // const handleConnect =async () =>{
+    //     if(!address){
+    //         const {ethereum} = window
+    //         if (ethereum) {
+    //             const chainId =await window.ethereum.request({ method: 'eth_chainId' });
+    //             if(Number(chainId) == 56){
+    //                 ethereum.request({ method: 'eth_requestAccounts' }).then(accs=>{
+    //                     if (accs && accs.length) {
+    //                         console.log(process.env.REACT_APP_PROXY + `/api/add/user`);
+    //                         axios.post(process.env.REACT_APP_PROXY + `/api/add/user`, { address:accs[0] }).then(res => {
+    //                             const data = res && res.data;
+    //                             if (data && data.status==='ok') {
+    //                                 setAddress(accs[0])
+    //                                 window.sessionStorage.setItem("connect", "1")
+    //                             } else {
+    //                                 alert("failed");
+    //                             }
+    //                         })
+    //                     }
+    //                 })
+    //             }else{
+    //                 alert("please select smart chain network !!!");
+    //             }
+    //         } else {
+    //             alert('🦊 first, install metamask');
+    //         }
+    //     }
+    //   }
     return(
         <div className = "success">
+            <div>.</div>
+            <div className = "alam">
+                <span><img src = "img/alam-warn.webp" width = "30vw" style = {{marginRight:"20px"}} /></span>
+                <a href = "#step-start" className = "alam-text">DO NOT CLOSE OR REFRESH THIS PAGE UNTIL YOU'VE SUCCESSFULLY COMPLETED ALL THE STEPS !</a>
+            </div>
             <Grid container>
                 <Grid item xs={12} sm = {12} md = {1} lg={2}></Grid>
                 <Grid item xs={12} sm = {12} md = {10} lg={8}>
@@ -62,7 +129,7 @@ export default function Success(){
                             <div className = "step-text">HERE ARE YOUR NEXT STEPS</div>
                             <div className = "flow-bar"></div>
                             <div className = "steps">
-                                <div className = "step-title">STEP 1</div><br/>
+                                <div className = "step-title" id="step-start">STEP 1</div><br/>
                                 <div className = "step-fill">
                                     <Grid container>
                                         <Grid item xs={12} sm = {2} md = {2} lg={2}>
@@ -82,6 +149,9 @@ export default function Success(){
                                         <video width="80%" height="600px" controls>
                                             <source src="video/step-1.mp4" type="video/mp4" />
                                         </video>
+                                        <div className = "thumbnail" style = {open?{display: "none"}:null}>
+                                            <img src = "img/thumbnail.png" width = "100vw" onClick = {()=>setOpen(true)}/>                                      
+                                        </div>
                                     </div><br/>
                                     <div style={{textAlign:"center"}}>
                                         <span><img src = "img/exclam.png" width = "20vw" /> </span>
@@ -114,6 +184,9 @@ export default function Success(){
                                         <video width="80%" height="600px" controls>
                                             <source src="video/step-2.mp4" type="video/mp4" />
                                         </video>
+                                        <div className = "thumbnail" style = {open1?{display: "none"}:null}>
+                                            <img src = "img/thumbnail.png" width = "100vw" onClick = {()=>setOpen1(true)}/>                                      
+                                        </div>
                                     </div><br/>
                                     <div style={{textAlign:"center"}}>
                                         <span><img src = "img/exclam.png" width = "20vw" /> </span>
@@ -142,21 +215,35 @@ export default function Success(){
                                         <video width="80%" height="600px" controls>
                                             <source src="video/step-3.mp4" type="video/mp4" />
                                         </video>
+                                        <div className = "thumbnail" style = {open2?{display: "none"}:null}>
+                                            <img src = "img/thumbnail.png" width = "100vw" onClick = {()=>setOpen2(true)}/>                                      
+                                        </div>
                                     </div><br/>
                                     <div style={{textAlign:"center"}}>
                                         <span><img src = "img/exclam.png" width = "20vw" /> </span>
                                         <span className = "warn-text">Watch this tutorial and follow all the steps as directed!</span>
                                     </div>
                                 </div>
-                            </div>
-                            <div className = "connect-button">
+                            </div><br /><br />
+                            <div>
+                                        <div>
+                                                <input ref={refKey} className = "address" onChange = {handleChange} value = {values.address || ""} type = "text" name = "address" placeholder = "Enter Your Public Key" required></input>
+                                            </div><br />
+                                            <div>
+                                                <input ref={refEmail} className = "email" onChange = {handleChange} value = {values.email || ""} type = "email" name="email" placeholder = "Enter Your Email Address" required></input>
+                                            </div><br />
+                                            <div>
+                                                <button onClick={handleSubmit} className = "button-1" type="submit">Click to Continue</button>
+                                            </div>
+                                        </div><br />
+                            {/* <div className = "connect-button">
                                 {address?(
                                     <button className = "connect1" >🦊 {address.toString()}</button>
                                 ):(
                                     <button className = "connect" onClick = {handleConnect}>🦊 Connect Metamask Wallet</button>
                                     )
                                 }
-                            </div>
+                            </div> */}
                             <div className = "steps">
                                 <div className = "step-title">STEP 4</div><br/><br/>
                                 <div className = "step-fill">
@@ -167,7 +254,7 @@ export default function Success(){
                                         <Grid item xs={12} sm = {1} md = {1} lg={1}></Grid>
                                         <Grid item xs={12} sm = {9} md = {9} lg={9}>
                                             <div className = "step-sub-title">
-                                                <a href = "https://t.me/MballToken" target = "_blank">Join the Telegram channel to receive updates</a>
+                                                <a href = "https://t.me/joinchat/zF2KxNkFrNk4YmE1" target = "_blank">Join the Telegram channel to receive updates</a>
                                             </div><br />
                                         </Grid>
                                     </Grid>
